@@ -1,5 +1,6 @@
 
 from vpython import *
+from prediction import load_model
 import serial
 import struct
 import math
@@ -32,6 +33,7 @@ class SerialClass:
             while True:
                 pass
         else:
+            self.active_keys = []
             self.indicator_vis = 1
             self.arm_vis = 1
             self.robot_vis = 1
@@ -75,7 +77,8 @@ class SerialClass:
             # self.palm1 = box(pos=vector(self.box_length[1]+(self.palm_length/2), 0, -self.box_length[0]+self.palm_width/4), axis=vector(1, 0, 0), color=color.white, size=vector(self.palm_length, self.box_thick, self.palm_width/2))
             # self.palm2 = box(pos=vector(self.box_length[1]+(self.palm_length/2), 0, -self.box_length[0]-self.palm_width/4), axis=vector(1, 0, 0), color=color.white, size=vector(self.palm_length, self.box_thick, self.palm_width/2))
             self.palm = sphere(pos=vec(self.box_length[1], 0, -self.box_length[0]), radius=sphere_rad, color=vector(0, 0.65, 1))
-            self.label = label(text = ' ', pos=vector(-20, 75, 20))
+
+            self.label = label(text = ' ', pos=vector(-23.275000000002855, 75.1470000000007, 20), align='left')
 
             robot_color = vector(0.4, 0.6, 0.4)
             self.r2 = 30
@@ -94,7 +97,7 @@ class SerialClass:
             self.rvel = rvel
             self.rtime = 0
 
-            robot_color_delay = vector(0, 1, 1)
+            robot_color_delay = vector(1, 0.75, 0)
             self.rarm1_delay = box(pos=vector(0, 0, 100), color=robot_color_delay,
                                    size=vector(self.r2, self.box_thick, self.box_thick))
             self.rjoint1_delay = sphere(pos=vec(0, 0, 100), radius=sphere_rad, color=robot_color_delay)
@@ -108,7 +111,7 @@ class SerialClass:
             self.rpalm_vel_delay = [0, 0]
             self.rtime_delay = 0
 
-            robot_color_now = vector(1, 1, 0)
+            robot_color_now = vector(1, 0, 1)
             self.rarm1_now = box(pos=vector(0, 0, 100), color=robot_color_now,
                                  size=vector(self.r2, self.box_thick, self.box_thick))
             self.rjoint1_now = sphere(pos=vec(0, 0, 100), radius=sphere_rad, color=robot_color_now)
@@ -124,7 +127,7 @@ class SerialClass:
 
             # -20, 25, gap 15
             thickness = 0.5
-            tolerance = 3
+            tolerance = 2
             box(pos=vector(-20, 40, -self.box_length[0]-5), axis=vector(0, 1, 0), length = 30, heigth = 1, width = thickness, up = vector(0, 0, 1))
             box(pos=vector(-5, 40, -self.box_length[0]-5), axis=vector(0, 1, 0), length=30, heigth=1, width=thickness, up=vector(0, 0, 1))
             box(pos=vector(10, 40, -self.box_length[0]-5), axis=vector(0, 1, 0), length=30, heigth=1, width=thickness, up=vector(0, 0, 1))
@@ -139,8 +142,7 @@ class SerialClass:
                 self.pattern.append([])
                 for y in range(pixel_num*pixel_num):
                     self.pattern[x].append(y)
-                # random_num = random.randint(0, pixel_num*pixel_num)
-                random_num = 300
+                random_num = random.randint(0, 300)
                 while len(self.pattern[x]) > random_num:
                     num_remove = random.randint(0, len(self.pattern[x])-1)
                     self.pattern[x].pop(num_remove)
@@ -156,7 +158,7 @@ class SerialClass:
             for x in range(6):
                 for y in range(len(buff[x])):
                     while buff[x][y] > 59:
-                        buff[x][y] = buff[x][y] - 59
+                        buff[x][y] = buff[x][y] - 60
                         due_y = due_y + 1
                     box(pos=vector(base[0] + buff[x][y] * pixel_len, base[1] - due_y * pixel_len, -self.box_length[0] - 5), axis=vector(1, 0, 0), length=pixel_len, heigth=1,
                         width=pixel_len, up=vector(0, 0, 1))
@@ -165,21 +167,22 @@ class SerialClass:
                     base[0] = base[0] + 15
                 elif x == 2:
                     base[1] = base[1] - 15
+                    base[0] = base[0] - 30
                 else:
-                    base[0] = base[0] - 15
+                    base[0] = base[0] + 15
             vid_factor = 40 / 14.5
             vid_fram_thickness = 3
             self.vid_objects = []
             base[0] = 2.5 - 20 + vid_factor * pixel_len / 2
             base[1] = 85.4 - vid_fram_thickness + 20 - vid_factor * pixel_len / 2
-            for x in range(pixel_num):
-                for y in range(pixel_num):
+            for y in range(pixel_num):
+                for x in range(pixel_num):
                     self.vid_objects.append(box(pos=vector(base[0] + x * vid_factor * pixel_len, base[1] - y * vid_factor * pixel_len, -self.box_length[0]-5), axis=vector(1, 0, 0), length=vid_factor * pixel_len, heigth=1, visible = False,
                             width=vid_factor * pixel_len, up=vector(0, 0, 1)))
 
             self.prev_r_state = 0
 
-            self.indicator = box(pos=vector(0, 0, 100), length=15-thickness-tolerance, width=15-thickness-tolerance, height=1, up=vector(0, 0, 1), color=vector(0, 0.2, 1))
+            self.indicator = box(pos=vector(0, 0, 100), length=15-thickness-tolerance, width=15-thickness-tolerance, height=1, up=vector(0, 0, 1), color=vector(0, 1, 1))
             self.target = vector(-12.5, 47.5, -self.box_length[0] - 5)
             self.targetl = box(pos=vector(-20, 47.5, -self.box_length[0]-4), axis=vector(0, 1, 0), length = 15,
                                heigth = 1, width = thickness, up = vector(0, 0, 1), color = color.red)
@@ -189,12 +192,21 @@ class SerialClass:
                                heigth=1, width=thickness, up=vector(0, 0, 1), color = color.red)
             self.targetd = box(pos=vector(-12.5, 40, -self.box_length[0] - 4), axis=vector(1, 0, 0), length=15 + thickness,
                                heigth=1, width=thickness, up=vector(0, 0, 1), color = color.red)
-            self.predictor = box(pos=vector(0, 0, 100), length=15-thickness, width=15-thickness, height=1, up=vector(0, 0, 1), color=vector(0.2, 0.9, 0.2))
+            self.predictor = box(pos=vector(0, 0, 100), length=15-thickness, width=15-thickness, height=1, up=vector(0, 0, 1), color=color.white)
             self.indicator_now = box(pos=vector(0, 0, 100), length=15-thickness-tolerance*2, width=15-thickness-tolerance*2, height=1, up=vector(0, 0, 1), color=color.yellow)
             self.target_t = 0
             self.target_state = 1
             self.arm_state = 0
 
+            self.indicator_robot = box(pos=vector(0, 0, 100), length=15 - thickness - tolerance * 3,
+                                       width=15 - thickness - tolerance * 3, height=1, up=vector(0, 0, 1),
+                                       color=vector(0.2, 0.9, 0.2))
+            self.indicator_robot_delay = box(pos=vector(0, 0, 100), length=15 - thickness,
+                                       width=15 - thickness - tolerance * 5, height=1, up=vector(0, 0, 1),
+                                       color=vector(1, 0.75, 0))
+            self.indicator_robot_now = box(pos=vector(0, 0, 100), length=15 - thickness - tolerance * 5,
+                                       width=15 - thickness, height=1, up=vector(0, 0, 1),
+                                       color=vector(1, 0, 1))
 
             box(pos=vector(2.5 - 20 - vid_fram_thickness / 2, 85.4 - vid_fram_thickness, -self.box_length[0]-5), axis=vector(0, 1, 0), length = 40,
                                   heigth = 5, width = vid_fram_thickness, up = vector(0, 0, 1), color = color.blue)
@@ -215,6 +227,22 @@ class SerialClass:
             self.palm_now = sphere(pos=vec(self.box_length[1], 0, -self.box_length[0]), radius=sphere_rad,
                                color=vector(0.75, 0.75, 0))
             self.state_now = 0
+
+            base = [-36.2885, 83.8045]
+            box(pos=vector(base[0], base[1], 0), axis=vector(1, 0, 0),
+                color=vector(0.75, 0.75, 0), size=vector(1.95, 1.95, 0.1))
+            base[1] = base[1] - 1.95
+            box(pos=vector(base[0], base[1], 0), axis=vector(1, 0, 0),
+                color=vector(0, 0.65, 1), size=vector(1.95, 1.95, 0.1))
+            base[1] = base[1] - 1.95
+            box(pos=vector(base[0], base[1], 0), axis=vector(1, 0, 0),
+                color=robot_color_now, size=vector(1.95, 1.95, 0.1))
+            base[1] = base[1] - 1.95
+            box(pos=vector(base[0], base[1], 0), axis=vector(1, 0, 0),
+                color=robot_color_delay, size=vector(1.95, 1.95, 0.1))
+            base[1] = base[1] - 1.95
+            box(pos=vector(base[0], base[1], 0), axis=vector(1, 0, 0),
+                color=robot_color, size=vector(1.95, 1.95, 0.1))
 
             self.serial.reset_input_buffer()
             self.time = time.time()
@@ -311,46 +339,46 @@ def update_serial(s, param):
 
         if 25 <= s.palm_now.pos.y < 40:
             if -20 <= s.palm_now.pos.x < -5:
-                s.indicator_now.pos = vector(-12.5, 32.5, -s.box_length[0]-3)
+                s.indicator_now.pos = vector(-12.5, 32.5, -s.box_length[0]-4.8)
                 s.state_now = 4
             elif -5 <= s.palm_now.pos.x < 10:
-                s.indicator_now.pos = vector(2.5, 32.5, -s.box_length[0]-3)
+                s.indicator_now.pos = vector(2.5, 32.5, -s.box_length[0]-4.8)
                 s.state_now = 5
             elif 10 <= s.palm_now.pos.x < 25:
-                s.indicator_now.pos = vector(17.5, 32.5, -s.box_length[0]-3)
+                s.indicator_now.pos = vector(17.5, 32.5, -s.box_length[0]-4.8)
                 s.state_now = 6
         elif 40 <= s.palm_now.pos.y < 55:
             if -20 <= s.palm_now.pos.x < -5:
-                s.indicator_now.pos = vector(-12.5, 47.5, -s.box_length[0]-3)
+                s.indicator_now.pos = vector(-12.5, 47.5, -s.box_length[0]-4.8)
                 s.state_now = 1
             elif -5 <= s.palm_now.pos.x < 10:
-                s.indicator_now.pos = vector(2.5, 47.5, -s.box_length[0]-3)
+                s.indicator_now.pos = vector(2.5, 47.5, -s.box_length[0]-4.8)
                 s.state_now = 2
             elif 10 <= s.palm_now.pos.x < 25:
-                s.indicator_now.pos = vector(17.5, 47.5, -s.box_length[0]-3)
+                s.indicator_now.pos = vector(17.5, 47.5, -s.box_length[0]-4.8)
                 s.state_now = 3
 
 
         s.arm_state = 0
         if 25 <= s.y < 40:
             if -20 <= s.x < -5:
-                s.indicator.pos = vector(-12.5, 32.5, -s.box_length[0]-4)
+                s.indicator.pos = vector(-12.5, 32.5, -s.box_length[0]-4.9)
                 s.arm_state = 4
             elif -5 <= s.x < 10:
-                s.indicator.pos = vector(2.5, 32.5, -s.box_length[0]-4)
+                s.indicator.pos = vector(2.5, 32.5, -s.box_length[0]-4.9)
                 s.arm_state = 5
             elif 10 <= s.x < 25:
-                s.indicator.pos = vector(17.5, 32.5, -s.box_length[0]-4)
+                s.indicator.pos = vector(17.5, 32.5, -s.box_length[0]-4.9)
                 s.arm_state = 6
         elif 40 <= s.y < 55:
             if -20 <= s.x < -5:
-                s.indicator.pos = vector(-12.5, 47.5, -s.box_length[0]-4)
+                s.indicator.pos = vector(-12.5, 47.5, -s.box_length[0]-4.9)
                 s.arm_state = 1
             elif -5 <= s.x < 10:
-                s.indicator.pos = vector(2.5, 47.5, -s.box_length[0]-4)
+                s.indicator.pos = vector(2.5, 47.5, -s.box_length[0]-4.9)
                 s.arm_state = 2
             elif 10 <= s.x < 25:
-                s.indicator.pos = vector(17.5, 47.5, -s.box_length[0]-4)
+                s.indicator.pos = vector(17.5, 47.5, -s.box_length[0]-4.9)
                 s.arm_state = 3
 
         num = round(s.prediction[0][0])
@@ -637,7 +665,7 @@ def update_serial(s, param):
                 s.r_state = 3
 
         if s.r_state != s.prev_r_state:
-
+            s.vid_objects
             if s.prev_r_state != 0:
                 s.prev_r_state = s.prev_r_state - 1
                 for x in range(len(s.pattern[s.prev_r_state])):
@@ -647,6 +675,7 @@ def update_serial(s, param):
                 s.r_state = s.r_state - 1
                 for x in range(len(s.pattern[s.r_state])):
                     s.vid_objects[s.pattern[s.r_state][x]].visible = True
+                s.r_state = s.r_state + 1
 
 
         if s.collect_data:
@@ -677,6 +706,50 @@ def update_serial(s, param):
                 s.targetl.pos = s.target + vector(-7.5, 0, 0)
                 s.targetr.pos = s.target + vector(7.5, 0, 0)
 
+        if 25 <= s.rjoint3.pos.y < 40:
+            if -20 <= s.rjoint3.pos.x < -5:
+                s.indicator_robot.pos = vector(-12.5, 32.5, -s.box_length[0]-4.7)
+            elif -5 <= s.rjoint3.pos.x < 10:
+                s.indicator_robot.pos = vector(2.5, 32.5, -s.box_length[0]-4.7)
+            elif 10 <= s.rjoint3.pos.x < 25:
+                s.indicator_robot.pos = vector(17.5, 32.5, -s.box_length[0]-4.7)
+        elif 40 <= s.rjoint3.pos.y < 55:
+            if -20 <= s.rjoint3.pos.x < -5:
+                s.indicator_robot.pos = vector(-12.5, 47.5, -s.box_length[0]-4.7)
+            elif -5 <= s.rjoint3.pos.x < 10:
+                s.indicator_robot.pos = vector(2.5, 47.5, -s.box_length[0]-4.7)
+            elif 10 <= s.rjoint3.pos.x < 25:
+                s.indicator_robot.pos = vector(17.5, 47.5, -s.box_length[0]-4.7)
+
+        if 25 <= s.rjoint3_delay.pos.y < 40:
+            if -20 <= s.rjoint3_delay.pos.x < -5:
+                s.indicator_robot_delay.pos = vector(-12.5, 32.5, -s.box_length[0]-4.6)
+            elif -5 <= s.rjoint3_delay.pos.x < 10:
+                s.indicator_robot_delay.pos = vector(2.5, 32.5, -s.box_length[0]-4.6)
+            elif 10 <= s.rjoint3_delay.pos.x < 25:
+                s.indicator_robot_delay.pos = vector(17.5, 32.5, -s.box_length[0]-4.6)
+        elif 40 <= s.rjoint3_delay.pos.y < 55:
+            if -20 <= s.rjoint3_delay.pos.x < -5:
+                s.indicator_robot_delay.pos = vector(-12.5, 47.5, -s.box_length[0]-4.6)
+            elif -5 <= s.rjoint3_delay.pos.x < 10:
+                s.indicator_robot_delay.pos = vector(2.5, 47.5, -s.box_length[0]-4.6)
+            elif 10 <= s.rjoint3_delay.pos.x < 25:
+                s.indicator_robot_delay.pos = vector(17.5, 47.5, -s.box_length[0]-4.6)
+
+        if 25 <= s.rjoint3_now.pos.y < 40:
+            if -20 <= s.rjoint3_now.pos.x < -5:
+                s.indicator_robot_now.pos = vector(-12.5, 32.5, -s.box_length[0]-4.5)
+            elif -5 <= s.rjoint3_now.pos.x < 10:
+                s.indicator_robot_now.pos = vector(2.5, 32.5, -s.box_length[0]-4.5)
+            elif 10 <= s.rjoint3_now.pos.x < 25:
+                s.indicator_robot_now.pos = vector(17.5, 32.5, -s.box_length[0]-4.5)
+        elif 40 <= s.rjoint3_now.pos.y < 55:
+            if -20 <= s.rjoint3_now.pos.x < -5:
+                s.indicator_robot_now.pos = vector(-12.5, 47.5, -s.box_length[0]-4.5)
+            elif -5 <= s.rjoint3_now.pos.x < 10:
+                s.indicator_robot_now.pos = vector(2.5, 47.5, -s.box_length[0]-4.5)
+            elif 10 <= s.rjoint3_now.pos.x < 25:
+                s.indicator_robot_now.pos = vector(17.5, 47.5, -s.box_length[0]-4.5)
 
         else:
             s.target_t = 0
@@ -751,6 +824,7 @@ def collect_data(s, name, duration):
 
 def visibility_indicator(s, vis):
     s.indicator_vis = vis
+    s.predictor.visible = vis
     if s.arm_delay_vis == 0:
         s.indicator.visible = 0
     else:
@@ -760,9 +834,18 @@ def visibility_indicator(s, vis):
     else:
         s.indicator_now.visible = vis
     if s.robot_vis == 0:
-        s.predictor.visible = 0
+        s.indicator_robot.visible = 0
     else:
-        s.predictor.visible = vis
+        s.indicator_robot.visible = vis
+    if s.robot_now_vis == 0:
+        s.indicator_robot_now.visible = 0
+    else:
+        s.indicator_robot_now.visible = vis
+    if s.robot_delay_vis == 0:
+        s.indicator_robot_delay.visible = 0
+    else:
+        s.indicator_robot_delay.visible = vis
+
 
 def visibility_arm(s, vis):
     s.arm_vis = vis
@@ -796,9 +879,9 @@ def visibility_robot(s, vis):
     s.rjoint1.visible = vis
     s.rarm1.visible = vis
     if s.indicator_vis == 0:
-        s.predictor.visible = 0
+        s.indicator_robot.visible = 0
     else:
-        s.predictor.visible = vis
+        s.indicator_robot.visible = vis
 
 def visibility_robot_delay(s, vis):
     s.robot_delay_vis = vis
@@ -808,10 +891,10 @@ def visibility_robot_delay(s, vis):
     s.rarm2_delay.visible = vis
     s.rjoint1_delay.visible = vis
     s.rarm1_delay.visible = vis
-    # if s.indicator_vis == 0:
-    #     s.predictor.visible = 0
-    # else:
-    #     s.predictor.visible = vis
+    if s.indicator_vis == 0:
+        s.indicator_robot_delay.visible = 0
+    else:
+        s.indicator_robot_delay.visible = vis
 
 def visibility_robot_now(s, vis):
     s.robot_now_vis = vis
@@ -821,19 +904,114 @@ def visibility_robot_now(s, vis):
     s.rarm2_now.visible = vis
     s.rjoint1_now.visible = vis
     s.rarm1_now.visible = vis
-    # if s.indicator_vis == 0:
-    #     s.predictor.visible = 0
-    # else:
-    #     s.predictor.visible = vis
+    if s.indicator_vis == 0:
+        s.indicator_robot_now.visible = 0
+    else:
+        s.indicator_robot_now.visible = vis
 
 def update_text(s):
-    # model
-    # delay
-    # on/off prediction
-    #
-    # when changing model, change s.delay parameter also
 
-    s.label.text = str(55)
+    s.label.text = str(int(s.delay*10)) + '00ms Delay\nHand Position Now (A)\nHand Position Delayed (S)\nRobot Now (D)\nRobot Delayed (F)\nRobot Predicted (G)\nIndicators (H)'
 
 def beep():
     winsound.Beep(500, 1500)
+
+def change_model(s, delay):
+    s.delay = delay
+    s.model = []
+    s.model = load_model('Model - Data 5 - ' + str(int(delay*10)) + '00ms - empty window 3 - LSTM 128~8')
+    buffer_param = []
+    s.output_param = []
+    read_csv(buffer_param, 'Param - Data 5 - ' + str(int(delay*10)) + '00ms - empty window 3 - LSTM 128~8')
+    for y in range(len(buffer_param[0])):
+        s.output_param.append(buffer_param[0][y])
+    update_text(s)
+
+def keyboard_input(s):
+    keys = keysdown()
+    # for x in range(len(keys)):
+    #     if keys[x] == 'j':
+    #         s.label.pos.x = s.label.pos.x - 0.0005
+    #         print([s.label.pos.x, s.label.pos.y])
+    #     elif keys[x] == 'l':
+    #         s.label.pos.x = s.label.pos.x + 0.0005
+    #         print([s.label.pos.x, s.label.pos.y])
+    #     elif keys[x] == 'i':
+    #         s.label.pos.y = s.label.pos.y + 0.0005
+    #         print([s.label.pos.x, s.label.pos.y])
+    #     elif keys[x] == 'k':
+    #         s.label.pos.y = s.label.pos.y - 0.0005
+    #         print([s.label.pos.x, s.label.pos.y])
+    for x in range(len(s.active_keys)-1, -1, -1):
+        same = 0
+        for y in range(len(keys)):
+            if keys[y] == s.active_keys[x]:
+                same = 1
+                break
+        if same == 0:
+            s.active_keys.pop(x)
+
+    for x in range(len(keys)-1, -1, -1):
+        for y in range(len(s.active_keys)):
+            if keys[x] == s.active_keys[y]:
+                keys.pop(x)
+                break
+
+    for x in range(len(keys)):
+        s.active_keys.append(keys[x])
+
+    for x in range(len(keys)):
+        if keys[x] == 'a':
+            if s.arm_vis:
+                visibility_arm(s, 0)
+            else:
+                visibility_arm(s, 1)
+        elif keys[x] == 's':
+            if s.arm_delay_vis:
+                visibility_arm_delay(s, 0)
+            else:
+                visibility_arm_delay(s, 1)
+        elif keys[x] == 'd':
+            if s.robot_now_vis:
+                visibility_robot_now(s, 0)
+            else:
+                visibility_robot_now(s, 1)
+        elif keys[x] == 'f':
+            if s.robot_delay_vis:
+                visibility_robot_delay(s, 0)
+            else:
+                visibility_robot_delay(s, 1)
+        elif keys[x] == 'g':
+            if s.robot_vis:
+                visibility_robot(s, 0)
+            else:
+                visibility_robot(s, 1)
+        elif keys[x] == 'h':
+            if s.indicator_vis:
+                visibility_indicator(s, 0)
+            else:
+                visibility_indicator(s, 1)
+        elif keys[x] == '`':
+            change_model(s, 0.3)
+        elif keys[x] == '1':
+            change_model(s, 0.5)
+        elif keys[x] == '2':
+            change_model(s, 0.8)
+        elif keys[x] == '3':
+            change_model(s, 1)
+        elif keys[x] == '4':
+            change_model(s, 1.3)
+        elif keys[x] == '5':
+            change_model(s, 1.5)
+        elif keys[x] == '6':
+            change_model(s, 1.8)
+        elif keys[x] == '7':
+            change_model(s, 2)
+        elif keys[x] == '8':
+            change_model(s, 2.3)
+        elif keys[x] == '9':
+            change_model(s, 2.5)
+        elif keys[x] == '0':
+            change_model(s, 2.8)
+        elif keys[x] == '-':
+            change_model(s, 3)

@@ -23,10 +23,12 @@ if __name__ == '__main__':
     # MODE = "Get_Robot_effectiveness"
     # MODE = 'Plot_effectiveness'
     # MODE = "Plot_All"
+    # MODE
     # MODE = "test"
 
     prediction = 5
     hidden_layer = 5
+
     max_hidden_layer = 4
     for x in range(hidden_layer):
         max_hidden_layer = max_hidden_layer * 2
@@ -299,7 +301,6 @@ if __name__ == '__main__':
         preprocess_output(LSTM_output_train, output_param)
         preprocess_input(LSTM_data_test, output_param)
         preprocess_output(LSTM_output_test, output_param)
-
 
 
         shuffle(LSTM_data_train, LSTM_output_train)
@@ -580,285 +581,18 @@ if __name__ == '__main__':
         plt.show()
 
 
-        # plot_output(LSTM_output_test, model_output, 0, 'GRU 16 8 data3 box')
-
-        # model_output = []
-        # buffer_param = []
-        # output_param = []
-        # LSTM_output_test = []
-        # true_pos = []
-        # read_csv(model_output,
-        #          'output - pos reference - velocity 0.05 - acc 0.05 - window 0.75 - 64')
-        # read_csv(LSTM_output_test, 'plot_data')
-        # read_csv(true_pos, 'pos_data')
-        # read_csv(buffer_param, 'param_data')
-        # for x in range(len(buffer_param[0])):
-        #     output_param.append(buffer_param[0][x])
-        # postprocess_output(model_output, output_param)
-        # for x in range(len(model_output)):
-        #     model_output[x][0] = model_output[x][0] + true_pos[x][0]
-        #     model_output[x][1] = model_output[x][1] + true_pos[x][1]
-        # plot_output(LSTM_output_test, model_output, 0, '64')
-        #
-        # model_output = []
-        # buffer_param = []
-        # output_param = []
-        # LSTM_output_test = []
-        # true_pos = []
-        # read_csv(model_output,
-        #          'output - pos reference - velocity 0.05 - acc 0.05 - window 0.75 - 64 32')
-        # read_csv(LSTM_output_test, 'plot_data')
-        # read_csv(true_pos, 'pos_data')
-        # read_csv(buffer_param, 'param_data')
-        # for x in range(len(buffer_param[0])):
-        #     output_param.append(buffer_param[0][x])
-        # postprocess_output(model_output, output_param)
-        # for x in range(len(model_output)):
-        #     model_output[x][0] = model_output[x][0] + true_pos[x][0]
-        #     model_output[x][1] = model_output[x][1] + true_pos[x][1]
-        # plot_output(LSTM_output_test, model_output, 0, '64 32')
-        #
-        # model_output = []
-        # buffer_param = []
-        # output_param = []
-        # LSTM_output_test = []
-        # true_pos = []
-        # read_csv(model_output,
-        #          'output - pos reference - velocity 0.05 - acc 0.05 - window 0.75 - 64 32 16')
-        # read_csv(LSTM_output_test, 'plot_data')
-        # read_csv(true_pos, 'pos_data')
-        # read_csv(buffer_param, 'param_data')
-        # for x in range(len(buffer_param[0])):
-        #     output_param.append(buffer_param[0][x])
-        # postprocess_output(model_output, output_param)
-        # for x in range(len(model_output)):
-        #     model_output[x][0] = model_output[x][0] + true_pos[x][0]
-        #     model_output[x][1] = model_output[x][1] + true_pos[x][1]
-        # plot_output(LSTM_output_test, model_output, 0, '64 32 16')
-        #
-        # model_output = []
-        # buffer_param = []
-        # output_param = []
-        # LSTM_output_test = []
-        # true_pos = []
-        # read_csv(model_output,
-        #          'output - pos reference - velocity 0.05 - acc 0.05 - window 0.75 - 64 32 16 8')
-        # read_csv(LSTM_output_test, 'plot_data')
-        # read_csv(true_pos, 'pos_data')
-        # read_csv(buffer_param, 'param_data')
-        # for x in range(len(buffer_param[0])):
-        #     output_param.append(buffer_param[0][x])
-        # postprocess_output(model_output, output_param)
-        # for x in range(len(model_output)):
-        #     model_output[x][0] = model_output[x][0] + true_pos[x][0]
-        #     model_output[x][1] = model_output[x][1] + true_pos[x][1]
-        # plot_output(LSTM_output_test, model_output, 0, '64 32 16 8')
-        #
-        # model_output = []
-        # buffer_param = []
-        # output_param = []
-        # LSTM_output_test = []
-        # true_pos = []
-        # read_csv(model_output,
-        #          'output - data2 - pos reference - velocity 0.25 - acc 0.35 - window 0.75 - 64 32 16 8')
-        # read_csv(LSTM_output_test, 'plot_data_2')
-        # read_csv(true_pos, 'pos_data_2')
-        # read_csv(buffer_param, 'param_data_2')
-        # for x in range(len(buffer_param[0])):
-        #     output_param.append(buffer_param[0][x])
-        # postprocess_output(model_output, output_param)
-        # for x in range(len(model_output)):
-        #     model_output[x][0] = model_output[x][0] + true_pos[x][0]
-        #     model_output[x][1] = model_output[x][1] + true_pos[x][1]
-        # plot_output(LSTM_output_test, model_output, 0, '64 32 16 8 data2')
-        #
-        # model_output = []
-        # buffer_param = []
-        # output_param = []
-        # LSTM_output_test = []
-        # true_pos = []
-        # read_csv(model_output,
-        #          'output - data2 - split - pos reference - velocity 0.25 - acc 0.35 - window 0.75 - 64 32 16 8')
-        # read_csv(LSTM_output_test, 'plot_data_2')
-        # read_csv(true_pos, 'pos_data_2')
-        # read_csv(buffer_param, 'param_data_2')
-        # for x in range(len(buffer_param[0])):
-        #     output_param.append(buffer_param[0][x])
-        # postprocess_output(model_output, output_param)
-        # for x in range(len(model_output)):
-        #     model_output[x][0] = model_output[x][0] + true_pos[x][0]
-        #     model_output[x][1] = model_output[x][1] + true_pos[x][1]
-        # plot_output(LSTM_output_test, model_output, 0, '64 32 16 8 data2 split')
-        #
-        # model_output = []
-        # buffer_param = []
-        # output_param = []
-        # LSTM_output_test = []
-        # true_pos = []
-        # read_csv(model_output,
-        #          'output - data2 - split - pos reference - velocity 0.25 - acc 0.35 - window 0.75 - GRU 64 32 16 8')
-        # read_csv(LSTM_output_test, 'plot_data_2')
-        # read_csv(true_pos, 'pos_data_2')
-        # read_csv(buffer_param, 'param_data_2')
-        # for x in range(len(buffer_param[0])):
-        #     output_param.append(buffer_param[0][x])
-        # postprocess_output(model_output, output_param)
-        # for x in range(len(model_output)):
-        #     model_output[x][0] = model_output[x][0] + true_pos[x][0]
-        #     model_output[x][1] = model_output[x][1] + true_pos[x][1]
-        # plot_output(LSTM_output_test, model_output, 0, 'GRU 64 32 16 8 data2 split')
-        #
-        # model_output = []
-        # buffer_param = []
-        # output_param = []
-        # LSTM_output_test = []
-        # true_pos = []
-        # read_csv(model_output,
-        #          'output - data2 - split - pos reference - velocity 0.25 - acc 0.35 - window 0.75 - GRU 32 16 8')
-        # read_csv(LSTM_output_test, 'plot_data_2')
-        # read_csv(true_pos, 'pos_data_2')
-        # read_csv(buffer_param, 'param_data_2')
-        # for x in range(len(buffer_param[0])):
-        #     output_param.append(buffer_param[0][x])
-        # postprocess_output(model_output, output_param)
-        # for x in range(len(model_output)):
-        #     model_output[x][0] = model_output[x][0] + true_pos[x][0]
-        #     model_output[x][1] = model_output[x][1] + true_pos[x][1]
-        # plot_output(LSTM_output_test, model_output, 0, 'GRU 32 16 8 data2 split')
-        #
-        # model_output = []
-        # buffer_param = []
-        # output_param = []
-        # LSTM_output_test = []
-        # true_pos = []
-        # read_csv(model_output,
-        #          'output - data2 - split - pos reference - velocity 0.25 - acc 0.35 - window 0.75 - GRU 256 64 16 8')
-        # read_csv(LSTM_output_test, 'plot_data_2')
-        # read_csv(true_pos, 'pos_data_2')
-        # read_csv(buffer_param, 'param_data_2')
-        # for x in range(len(buffer_param[0])):
-        #     output_param.append(buffer_param[0][x])
-        # postprocess_output(model_output, output_param)
-        # for x in range(len(model_output)):
-        #     model_output[x][0] = model_output[x][0] + true_pos[x][0]
-        #     model_output[x][1] = model_output[x][1] + true_pos[x][1]
-        # plot_output(LSTM_output_test, model_output, 0, 'GRU 256 64 16 8 data2 split')
-        #
-        # model_output = []
-        # buffer_param = []
-        # output_param = []
-        # LSTM_output_test = []
-        # true_pos = []
-        # read_csv(model_output,
-        #          'output - data2 - split - pos reference - velocity 0.25 - acc 0.35 - window 0.75 - GRU 512 256 128 64 32 16 8')
-        # read_csv(LSTM_output_test, 'plot_data_2')
-        # read_csv(true_pos, 'pos_data_2')
-        # read_csv(buffer_param, 'param_data_2')
-        # for x in range(len(buffer_param[0])):
-        #     output_param.append(buffer_param[0][x])
-        # postprocess_output(model_output, output_param)
-        # for x in range(len(model_output)):
-        #     model_output[x][0] = model_output[x][0] + true_pos[x][0]
-        #     model_output[x][1] = model_output[x][1] + true_pos[x][1]
-        # plot_output(LSTM_output_test, model_output, 0, 'GRU 512 256 128 64 32 16 8 data2 split')
-        #
-        # model_output = []
-        # buffer_param = []
-        # output_param = []
-        # LSTM_output_test = []
-        # true_pos = []
-        # read_csv(model_output,
-        #          'output - data2 - split - pos reference - velocity 0.25 - acc 0.35 - window 0.75 - GRU 8')
-        # read_csv(LSTM_output_test, 'plot_data_2')
-        # read_csv(true_pos, 'pos_data_2')
-        # read_csv(buffer_param, 'param_data_2')
-        # for x in range(len(buffer_param[0])):
-        #     output_param.append(buffer_param[0][x])
-        # postprocess_output(model_output, output_param)
-        # for x in range(len(model_output)):
-        #     model_output[x][0] = model_output[x][0] + true_pos[x][0]
-        #     model_output[x][1] = model_output[x][1] + true_pos[x][1]
-        # plot_output(LSTM_output_test, model_output, 0, 'GRU 8 data2 split')
-        #
-        # model_output = []
-        # buffer_param = []
-        # output_param = []
-        # LSTM_output_test = []
-        # true_pos = []
-        # read_csv(model_output,
-        #          'output - data3 - split - pos reference - velocity 0.25 - acc 0.35 - window 0.75 - GRU 64 32 16 8')
-        # read_csv(LSTM_output_test, 'plot_data_3')
-        # read_csv(true_pos, 'pos_data_3')
-        # read_csv(buffer_param, 'param_data_3')
-        # for x in range(len(buffer_param[0])):
-        #     output_param.append(buffer_param[0][x])
-        # postprocess_output(model_output, output_param)
-        # for x in range(len(model_output)):
-        #     model_output[x][0] = model_output[x][0] + true_pos[x][0]
-        #     model_output[x][1] = model_output[x][1] + true_pos[x][1]
-        # plot_output(LSTM_output_test, model_output, 0, 'GRU 64 32 16 8 data3 split')
-        #
-        # model_output = []
-        # buffer_param = []
-        # output_param = []
-        # LSTM_output_test = []
-        # true_pos = []
-        # read_csv(model_output,
-        #          'output - data3 - split - pos reference - velocity 0.25 - acc 0.35 - window 0.75 - GRU 256 128 64 32 16 8')
-        # read_csv(LSTM_output_test, 'plot_data_3')
-        # read_csv(true_pos, 'pos_data_3')
-        # read_csv(buffer_param, 'param_data_3')
-        # for x in range(len(buffer_param[0])):
-        #     output_param.append(buffer_param[0][x])
-        # postprocess_output(model_output, output_param)
-        # for x in range(len(model_output)):
-        #     model_output[x][0] = model_output[x][0] + true_pos[x][0]
-        #     model_output[x][1] = model_output[x][1] + true_pos[x][1]
-        # plot_output(LSTM_output_test, model_output, 0, 'GRU 256 128 64 32 16 8 data3 split')
-        #
-        # model_output = []
-        # buffer_param = []
-        # output_param = []
-        # LSTM_output_test = []
-        # true_pos = []
-        # read_csv(model_output,
-        #          'output - data3 - box 30 - window 0.5 - GRU 16 8')
-        # read_csv(LSTM_output_test, 'plot_data_3')
-        # # read_csv(true_pos, 'pos_data_3')
-        # read_csv(buffer_param, 'param_data_3_box')
-        # for x in range(len(buffer_param[0])):
-        #     output_param.append(buffer_param[0][x])
-        # postprocess_output(model_output, output_param)
-        # # for x in range(len(model_output)):
-        # #     model_output[x][0] = model_output[x][0] + true_pos[x][0]
-        # #     model_output[x][1] = model_output[x][1] + true_pos[x][1]
-        # for x in range(len(model_output)):
-        #     model_output[x][0] = -20 + (round(model_output[x][0]) - 1) * 30
-        # plot_output(LSTM_output_test, model_output, 0, 'GRU 16 8 data3 box')
-
-        # filter for only 2 input 2 output
-        # xdat = [item[0] for item in model_output]
-        # ydat = [item[1] for item in model_output]
-        # apply_filter(xdat, filt, order, smoothx)
-        # apply_filter(ydat, filt, order, smoothy)
-        # model_output = []
-        # for a in range(len(smoothx)):
-        #     model_output.append([smoothx[a], smoothy[a]])
-
-
-
     elif MODE == "Normal":
 
         tf.keras.utils.disable_interactive_logging()
-
-        s = SerialClass("COM3", 10, width, window, robot_vel, delay, )
+        delay = 0.3
+        s = SerialClass("COM3", 10, width, window, robot_vel, delay)
         calibrate(s, 5)
-        model = load_model('Model - ' + file_name)
+        s.model = load_model('Model - Data 5 - 300ms - empty window 3 - LSTM 128~8')
         buffer_param = []
-        output_param = []
+        s.output_param = []
         read_csv(buffer_param, 'Param - ' + file_name)
         for x in range(len(buffer_param[0])):
-            output_param.append(buffer_param[0][x])
+            s.output_param.append(buffer_param[0][x])
 
         # visibility_robot(s, 0)
         # visibility_robot_now(s, 0)
@@ -866,12 +600,14 @@ if __name__ == '__main__':
         # visibility_arm(s, 0)
         # visibility_arm_delay(s, 0)
         # visibility_indicator(s, 0)
+        update_text(s)
         while True:
             #text input: delay amount
             #radio buttons: camera pos
-            update_serial(s, output_param)
+            update_serial(s, s.output_param)
+            keyboard_input(s)
             # a = time.time()
-            predict(s, model, 0.1, output_param)
+            predict(s, s.model, 0.1, s.output_param)
 
             # if time.time() - a > 0.05:
             #     print(time.time() - a)
@@ -936,7 +672,7 @@ if __name__ == '__main__':
         stop()
 
     elif MODE == 'Plot_effectiveness':
-        delay = [300, 500, 800, 1000, 1300, 1500, 1800, 2000, 2300, 2500, 2800, 3000]
+        delay = [300, 500, 800, 1000, 1300, 1500, 1800, 2000, 2300, 2500, 2800, 3000, 4000, 6000, 8000, 10000]
         #GRU
         # rmse_without = [5.8197, 7.6195, 10.2113, 11.7967, 13.9221, 15.1773, 16.8583, 17.8085, 18.9430, 19.5205, 20.1291, 20.4309]
         # rmse_with = [4.0151, 4.5023, 5.8711, 7.3361, 8.6536, 9.8271, 11.1396, 12.1478, 13.3084, 13.8009, 14.0105, 13.9864]
@@ -944,10 +680,10 @@ if __name__ == '__main__':
         # acc_with = [0.8555, 0.8245, 0.7407, 0.6484, 0.5724, 0.4940, 0.4086, 0.3343, 0.2704, 0.2513, 0.2309, 0.2299]
 
         #LSTM
-        rmse_with =[ 4.088339128364286, 4.4433493799865476, 5.949118891447315, 6.920611719569019, 8.575532077312332, 9.88205902213602, 12.078351409577133, 13.947773056264456, 15.100003091587649, 14.822069704053538, 14.805925089602583, 14.833600646796098]
-        rmse_without = [ 5.933043706468459, 7.863522472293858, 10.514424751216625, 12.133060343166676, 14.462058154606082, 15.779694763025443, 17.59445584156312, 18.502086256073568, 19.75120511098072, 20.38330058630951, 21.011329847025127, 21.184660544670326]
-        acc_with = [ 0.8708860759493671, 0.8489451476793249, 0.745531914893617, 0.6893617021276596, 0.5867346938775511, 0.5232067510548524, 0.3534923339011925, 0.2776371308016878, 0.21030405405405406, 0.21869639794168097, 0.21875, 0.21331058020477817]
-        acc_without = [ 0.770464135021097, 0.6751054852320675, 0.5438297872340425, 0.4757446808510638, 0.35799319727891155, 0.280168776371308, 0.17291311754684838, 0.1021097046413502, 0.05320945945945946, 0.058319039451114926, 0.08023648648648649, 0.08703071672354949]
+        rmse_with =[ 4.088339128364286, 4.4433493799865476, 5.949118891447315, 6.920611719569019, 8.575532077312332, 9.88205902213602, 12.078351409577133, 13.947773056264456, 15.100003091587649, 14.822069704053538, 14.805925089602583, 14.833600646796098, 15.042914423607161, 15.643639673856159, 15.927289405259637, 16.548714341921745]
+        rmse_without = [ 5.933043706468459, 7.863522472293858, 10.514424751216625, 12.133060343166676, 14.462058154606082, 15.779694763025443, 17.59445584156312, 18.502086256073568, 19.75120511098072, 20.38330058630951, 21.011329847025127, 21.184660544670326, 20.784915917720554, 18.129599425670193, 19.408845792876456, 20.41830348747224]
+        acc_with = [ 0.8708860759493671, 0.8489451476793249, 0.745531914893617, 0.6893617021276596, 0.5867346938775511, 0.5232067510548524, 0.3534923339011925, 0.2776371308016878, 0.21030405405405406, 0.21869639794168097, 0.21875, 0.21331058020477817, 0.1974025974025974, 0.20087336244541484, 0.22415291051259775, 0.18041237113402062]
+        acc_without = [ 0.770464135021097, 0.6751054852320675, 0.5438297872340425, 0.4757446808510638, 0.35799319727891155, 0.280168776371308, 0.17291311754684838, 0.1021097046413502, 0.05320945945945946, 0.058319039451114926, 0.08023648648648649, 0.08703071672354949, 0.1264069264069264, 0.18427947598253275, 0.12510860121633363, 0.11855670103092783]
 
         # 1749427410.885838 - 1749407301.0685797
 
@@ -976,9 +712,12 @@ if __name__ == '__main__':
         #GRU
         # ai_freq = [0.6928, 0.7346, 0.9524, 1.2364, 1.5887, 1.4716, 1.6736, 1.6653, 1.4070, 1.4154, 0.2096, 0.2096]
         #LSTM
-        ai_freq = [ 0.7095158597662922, 0.7262103505843225, 1.1027568922305997, 1.2364243943191573, 1.638795986622108, 1.5635451505017053, 1.3807531380753428, 1.4058577405858037, 0.21775544388610174, 0.8542713567839375, 0.20955574182733047, 0.20955574182733047]
+        ai_freq = [ 0.7095158597662922, 0.7262103505843225, 1.1027568922305997, 1.2364243943191573, 1.638795986622108, 1.5635451505017053, 1.3807531380753428, 1.4058577405858037, 0.21775544388610174, 0.8542713567839375, 0.20955574182733047, 0.20955574182733047, 0.20990764063812362, 0.235888795282229, 0.18596787827557443, 0.1950805767599701]
 
-
+        auc = [0.9644653843157595, 0.9640812206264648, 0.9258228873816275, 0.8806900756779292, 0.8203670822212351,
+               0.7926100134173321, 0.6368710850607932, 0.584288064113863, 0.4972159090909091, 0.5000833836149101,
+               0.5138541666666666, 0.5135606060606062, 0.5036079545454545, 0.49738136077758727, 0.5089251000571756,
+               0.48966838193253287]
         all_data = []
         for x in range(len(rmse_without)):
             all_data.append(rmse_with[x])
@@ -1020,6 +759,13 @@ if __name__ == '__main__':
 
         figure.tight_layout()
 
+        figure, axis = plt.subplots(1, 1)
+        axis.plot(delay, auc)
+        axis.set_title('dik')
+        axis.set_xlabel('idkx')
+        axis.set_ylabel('idky')
+
+
         plt.show()
 
     elif MODE == 'Plot_All':
@@ -1028,7 +774,7 @@ if __name__ == '__main__':
         base2 = '00ms - empty window 3 - LSTM 128~8'
 
         num3 = [0, 0]
-        for y in [3, 5, 8, 10, 13, 15, 18, 20, 23, 25, 28, 30]:
+        for y in [3, 5, 8, 10, 13, 15, 18, 20, 23, 25, 28, 30, 40, 60, 80, 100]:
             model_output = []
             LSTM_output_test = []
             read_csv(model_output, 'Predicted - ' + base1 + str(y) + base2)

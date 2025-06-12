@@ -588,6 +588,8 @@ def update_serial_rfd(s, total_len):
                 for x in range(len(s.pattern[s.r_state])):
                     s.vid_objects[s.pattern[s.r_state][x]].visible = True
 
+                s.r_state = s.r_state + 1
+
 
         if s.collect_data:
             state_cehck = s.state_now
