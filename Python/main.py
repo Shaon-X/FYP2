@@ -35,6 +35,8 @@ if __name__ == '__main__':
     max_hidden_layer = int(max_hidden_layer)
     window = 3
     width = 10
+    prediction = int(prediction * 10 / width)
+    window = int(window * 10 / width)
     robot_vel = 50 #cm/s
 
     empty_window = 1
@@ -485,7 +487,7 @@ if __name__ == '__main__':
                 num1 = num1 + 1
             else:
                 num2 = num2 + 1
-        print(num1 / (num1 + num2))
+        print('X-Accuracy' + str(num1 / (num1 + num2)))
 
         num1 = 0
         num2 = 0
@@ -494,7 +496,7 @@ if __name__ == '__main__':
                 num1 = num1 + 1
             else:
                 num2 = num2 + 1
-        print(num1 / (num1 + num2))
+        print('Y-Accuracy' + str(num1 / (num1 + num2)))
 
 
         test_data= []
@@ -693,13 +695,13 @@ if __name__ == '__main__':
         axis[0].plot(delay, rmse_with, label="With Prediction")
         axis[0].set_title('Root Mean Squared Error')
         axis[0].set_ylabel('Magnitude (cm)')
-        axis[0].set_xlabel('Delay Induced (s)')
+        axis[0].set_xlabel('Delay Induced (ms)')
 
         axis[1].plot(delay, acc_without, label="Without Prediction")
         axis[1].plot(delay, acc_with, label="With Prediction")
         axis[1].set_title('Accuracy')
         axis[1].set_ylabel('Magnitude')
-        axis[1].set_xlabel('Delay Induced (s)')
+        axis[1].set_xlabel('Delay Induced (ms)')
 
         axis[0].legend(loc='best')
         axis[1].legend(loc='best')
@@ -744,15 +746,15 @@ if __name__ == '__main__':
         axis[0].plot(delay, ai_freq, label="With Prediction")
         axis[0].set_title('Frequency of Outputs')
         axis[0].set_ylabel('Frequency (Hz)')
-        axis[0].set_xlabel('Delay Induced (s)')
+        axis[0].set_xlabel('Delay Induced (ms)')
 
-        axis[1].plot(delay, rmse_without, label="RMSE w/oP", color = 'b', linestyle = '-')
-        axis[1].plot(delay, rmse_with, label="RMSE wP", color = 'r', linestyle = '-')
-        axis[1].plot(delay, acc_without, label="Accuracy w/oP", color = 'b', linestyle = '--')
-        axis[1].plot(delay, acc_with, label="Accuracy wP", color = 'r', linestyle = '--')
+        axis[1].plot(delay, rmse_without, label="RMSE without prediction", color = 'b', linestyle = '-')
+        axis[1].plot(delay, rmse_with, label="RMSE with prediction", color = 'r', linestyle = '-')
+        axis[1].plot(delay, acc_without, label="Accuracy without prediction", color = 'b', linestyle = '--')
+        axis[1].plot(delay, acc_with, label="Accuracy with prediction", color = 'r', linestyle = '--')
         axis[1].set_title('Normalized RMSE and Accuracy')
         axis[1].set_ylabel('Magnitude')
-        axis[1].set_xlabel('Delay Induced (s)')
+        axis[1].set_xlabel('Delay Induced (ms)')
 
         axis[0].legend(loc='best')
         axis[1].legend(loc='best')
@@ -761,9 +763,9 @@ if __name__ == '__main__':
 
         figure, axis = plt.subplots(1, 1)
         axis.plot(delay, auc)
-        axis.set_title('dik')
-        axis.set_xlabel('idkx')
-        axis.set_ylabel('idky')
+        axis.set_title('AUC-ROC vs Delay Induced')
+        axis.set_xlabel('Delay Induced (ms)')
+        axis.set_ylabel('AUC-ROC')
 
 
         plt.show()

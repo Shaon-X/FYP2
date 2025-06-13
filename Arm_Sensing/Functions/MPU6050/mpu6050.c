@@ -108,7 +108,7 @@ void mpu6050_init(mpu_t* p_mpu, uint8_t AD0, float ratio, float statratio, float
 	p_mpu->para[2] = statratio;
 	p_mpu->para[3] = 1.0 - statratio;
 	p_mpu->para[4] = maglim;
-	p_mpu->para[5] = sin(maglim);
+	p_mpu->para[5] = asin(maglim);
 	p_mpu->para[6] = vellim;
 	p_mpu->para[7] = xvel;
 	p_mpu->para[8] = xmag;

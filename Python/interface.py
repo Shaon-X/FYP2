@@ -665,7 +665,7 @@ def update_serial(s, param):
                 s.r_state = 3
 
         if s.r_state != s.prev_r_state:
-            s.vid_objects
+            # s.vid_objects
             if s.prev_r_state != 0:
                 s.prev_r_state = s.prev_r_state - 1
                 for x in range(len(s.pattern[s.prev_r_state])):
@@ -705,6 +705,8 @@ def update_serial(s, param):
                 s.targetd.pos = s.target + vector(0, -7.5, 0)
                 s.targetl.pos = s.target + vector(-7.5, 0, 0)
                 s.targetr.pos = s.target + vector(7.5, 0, 0)
+        else:
+            s.target_t = 0
 
         if 25 <= s.rjoint3.pos.y < 40:
             if -20 <= s.rjoint3.pos.x < -5:
@@ -751,8 +753,7 @@ def update_serial(s, param):
             elif 10 <= s.rjoint3_now.pos.x < 25:
                 s.indicator_robot_now.pos = vector(17.5, 47.5, -s.box_length[0]-4.5)
 
-        else:
-            s.target_t = 0
+
 
 
 def calibrate(s, duration):
